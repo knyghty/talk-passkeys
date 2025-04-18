@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>reveal.js</title>
+
+  <link rel="stylesheet" href="dist/reset.css">
+  <link rel="stylesheet" href="dist/reveal.css">
+  <link rel="stylesheet" href="dist/theme/white.css">
+  <link rel="stylesheet" href="plugin/highlight/github.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section>
+        <h1>Passkeys in Django</h1>
+        The best of all possible worlds
+      </section>
+      <section>
+        <h2>What this isn't</h2>
+        There are no technical details here.
+      </section>
+      <section>
+        <h2>Why?</h2>
+        <ul>
+          <li>Easier, more accessible login</li>
+          <li>More secure*</li>
+          <li>No more 2FA</li>
+        </ul>
+      </section>
+      <section>
+        <h2>What are passkeys?</h2>
+        <div class="flex-images">
+          <img src="img/Face_ID_logo.svg" alt="Face ID logo" width="200">
+          <img src="img/Touch_ID_logo.png" alt="Touch ID logo" width="200">
+        </div>
+      </section>
+      <section>
+        <h2>What else are passkeys?</h2>
+        <ul>
+          <li>Android</li>
+          <li>Windows Hello</li>
+          <li>Linux (but don't ask me how)</li>
+          <li>Hardware security keys</li>
+        </ul>
+      </section>
+      <section>
+        <h2>Security</h2>
+        <p>Resistant to:</p>
+        <ul>
+          <li>Guessing</li>
+          <li>Phishing</li>
+          <li>Credential stuffing</li>
+          <li>Database leaks</li>
+        </ul>
+      </section>
+      <section>
+        <h2>However...</h2>
+        <ul>
+          <li>Do you trust Apple?</li>
+          <li>If not, do you trust yourself?</li>
+          <li>Do you still allow passwords?</li>
+        </ul>
+      </section>
+      <section>
+        <h2>UX and accessibility</h2>
+        <ul>
+          <li>No more remembering passwords</li>
+          <li>Or dealing with password managers</li>
+          <li>An authentication option to suit you</li>
+        </ul>
+      </section>
+      <section>
+        <h2>However...</h2>
+        <ul>
+          <li>HTTPS only</li>
+          <li>JS required</li>
+        </ul>
+      </section>
+      <section>
+        <h2>And 2FA?</h2>
+        <ul>
+          <li>Email and SMS are not considered very secure</li>
+          <li>OTP authenticator apps are clunky and annoying</li>
+        </ul>
+      </section>
+      <section>
+        <h2>What is a second factor anyway?</h2>
+        <ul>
+          <li>Something you have</li>
+          <li>Something you know</li>
+          <li>Something you are</li>
+          <li>Passkeys always hit two of these</li>
+        </ul>
+      </section>
+      <section>
+        <h2>However...</h2>
+        <ul>
+          <li>Something you lost</li>
+          <li>Something you forgot</li>
+          <li>Something you were</li>
+        </ul>
+      </section>
+      <section>
+        <h2>How?</h2>
+        <code>pip install django-otp-webuathn</code>
+      </section>
+      <section>
+        <pre>
+          <code data-trim data-line-numbers class="django">
+            {% extends "admin/base.html" %}
+            {% load otp_webauthn %}
+            {% block userlinks %}
+              <template id="passkey-registration-available-template">
+                <button type="button" id="passkey-register-button">Register Passkey</button>
+                <span id="passkey-register-status-message"></span>
+              </template>
+              <template id="passkey-registration-unavailable-template">
+                <span>Sorry, your browser has no Passkey support</span>
+              </template>
+              <span id="passkey-registration-placeholder"></span>
+              {% render_otp_webauthn_register_scripts %}
+              {{ block.super }}
+            {% endblock userlinks %}
+          </code>
+        </pre>
+      </section>
+      <section>
+        <pre>
+          <code data-trim data-line-numbers class="django">
+            {% extends "admin/login.html" %}
+            {% load otp_webauthn %}
+            {% block content %}
+              {{ block.super }}
+              <form method="post" class="submit-row">
+                <span id="passkey-verification-placeholder"></span>
+                <template id="passkey-verification-available-template">
+                  <button
+                    id="passkey-verification-button"
+                    class="button"
+                    style="padding:10px 15px; margin-top: 15px"
+                  >
+                    Login using a Passkey
+                  </button>
+                  <div id="passkey-verification-status-message"></div>
+                </template>
+                <template id="passkey-verification-unavailable-template">
+                  <p>Sorry, your browser has no Passkey support</p>
+                </template>
+                {% render_otp_webauthn_auth_scripts username_field_selector="#id_username" %}
+              </form>
+            {% endblock content %}
+          </code>
+        </pre>
+      </section>
+      <section>
+        <h2>Demo</h2>
+      </section>
+      <section>
+        <h2>Integration</h2>
+        <ul>
+          <li>Listing passkeys nicely (MDS)</li>
+          <li>Deleting passkeys</li>
+        </ul>
+      </section>
+      <section>
+        <h2>Using passkeys with 2FA</h2>
+        Doing 2FA when user didn't use their passkey
+        <pre>
+          <code data-trim class="python">
+            def otp_or_passkey_required(func):
+                def _wrapped_view(request, *args, **kwargs):
+                    if (
+                        not request.user.is_verified()
+                        and request.user.webauthncredential_set.exists()
+                    ):
+                        return redirect(
+                          reverse("...", query={"next": request.path})
+                        )
+                    return otp_required(login_url="twofa:setup")(func)(
+                       request, *args, **kwargs
+                    )
+                return _wrapped_view
+          </code>
+        </pre>
+      </section>
+      <section>
+        <h2>Passkeys in Django core?</h2>
+        Maybe.
+      </section>
+      <section>
+        <h2>Conclusion</h2>
+        <ul>
+          <li>I think you should use passkeys</li>
+          <li>I think you should offer them to your users</li>
+        </ul>
+      </section>
+      <section>
+        <h2>Me</h2>
+        <ul>
+          <li>No social media :)</li>
+          <li>GitHub: <a href="https://github.com/knyghty">@knyghty</a></li>
+          <li>Web: <a href="https://carrick.eu">carrick.eu</a></li>
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <script src="dist/reveal.js"></script>
+  <script src="plugin/notes/notes.js"></script>
+  <script src="plugin/markdown/markdown.js"></script>
+  <script src="plugin/highlight/highlight.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+    });
+  </script>
+</body>
+
+</html>

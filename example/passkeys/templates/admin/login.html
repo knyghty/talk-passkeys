@@ -1,0 +1,23 @@
+{% extends "admin/login.html" %}
+{% load otp_webauthn %}
+
+{% block content %}
+  {{ block.super }}
+  <form method="post" class="submit-row">
+    <span id="passkey-verification-placeholder"></span>
+    <template id="passkey-verification-available-template">
+      <button
+        id="passkey-verification-button"
+        class="button"
+        style="padding:10px 15px; margin-top: 15px"
+      >
+        Login using a Passkey
+      </button>
+      <div id="passkey-verification-status-message"></div>
+    </template>
+    <template id="passkey-verification-unavailable-template">
+      <p>Sorry, your browser has no Passkey support</p>
+    </template>
+    {% render_otp_webauthn_auth_scripts username_field_selector="#id_username" %}
+  </form>
+{% endblock content %}

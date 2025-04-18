@@ -1,0 +1,8 @@
+:root {
+    --r-heading-text-transform: none;
+}
+
+.flex-images {
+    display: flex;
+    justify-content: space-evenly;
+}

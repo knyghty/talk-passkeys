@@ -1,0 +1,15 @@
+{% extends "admin/base.html" %}
+{% load otp_webauthn %}
+
+{% block userlinks %}
+  <template id="passkey-registration-available-template">
+    <button type="button" id="passkey-register-button">Register Passkey</button>
+    <span id="passkey-register-status-message"></span>
+  </template>
+  <template id="passkey-registration-unavailable-template">
+    <span>Sorry, your browser has no Passkey support</span>
+  </template>
+  <span id="passkey-registration-placeholder"></span>
+  {% render_otp_webauthn_register_scripts %}
+  {{ block.super }}
+{% endblock userlinks %}
