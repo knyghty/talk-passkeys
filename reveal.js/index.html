@@ -20,18 +20,28 @@
       <section>
         <h1>Passkeys in Django</h1>
         The best of all possible worlds
+        <aside class="notes">00:00 - 00:00:30</aside>
       </section>
       <section>
         <h2>What this isn't</h2>
         There are no technical details here.
+        <aside class="notes">00:00:30 - 00:01</aside>
       </section>
       <section>
         <h2>Why?</h2>
         <ul>
           <li>Easier, more accessible login</li>
-          <li>More secure*</li>
+          <li>More secure</li>
           <li>No more 2FA</li>
         </ul>
+        <aside class="notes">
+          <p>00:01 - 00:02</p>
+          <p>
+            These are a bit opinionated.
+            Some people have said they're not that usable.
+            There are not foolproof and some may not prefer them to passwords.
+          </p>
+        </aside>
       </section>
       <section>
         <h2>What are passkeys?</h2>
@@ -39,15 +49,26 @@
           <img src="img/Face_ID_logo.svg" alt="Face ID logo" width="200">
           <img src="img/Touch_ID_logo.png" alt="Touch ID logo" width="200">
         </div>
+        <aside class="notes">
+          <p>00:02 - 00:03</p>
+          <p>Strictly speaking, they're not really passkeys, just a way to use them. Nobody cares.</p>
+          <p>
+            But we need to point out here that it's just a private key on a device (or cloud).
+            The site only has the public key.
+          </p>
+        </aside>
       </section>
       <section>
         <h2>What else are passkeys?</h2>
         <ul>
           <li>Android</li>
           <li>Windows Hello</li>
-          <li>Linux (but don't ask me how)</li>
+          <li>Linux</li>
           <li>Hardware security keys</li>
         </ul>
+        <aside class="notes">
+          <p>00:03 - 00:04</p>
+        </aside>
       </section>
       <section>
         <h2>Security</h2>
@@ -58,6 +79,7 @@
           <li>Credential stuffing</li>
           <li>Database leaks</li>
         </ul>
+        <aside class="notes">00:04 - 00:06</aside>
       </section>
       <section>
         <h2>However...</h2>
@@ -66,6 +88,11 @@
           <li>If not, do you trust yourself?</li>
           <li>Do you still allow passwords?</li>
         </ul>
+        <aside class="notes">
+          <p>00:06 - 00:08</p>
+          <p>Limited support for exporting passkeys.</p>
+          <p>Worth mentioning here that you can require users with a passkey use it.</p>
+        </aside>
       </section>
       <section>
         <h2>UX and accessibility</h2>
@@ -74,6 +101,10 @@
           <li>Or dealing with password managers</li>
           <li>An authentication option to suit you</li>
         </ul>
+        <aside class="notes">
+          <p>00:08 - 00:10</p>
+          <p>Though there is a synergy here that you can use a password manager to sync passkeys</p>
+        </aside>
       </section>
       <section>
         <h2>However...</h2>
@@ -81,6 +112,9 @@
           <li>HTTPS only</li>
           <li>JS required</li>
         </ul>
+        <aside class="notes">
+          <p>00:10 - 00:11</p>
+        </aside>
       </section>
       <section>
         <h2>And 2FA?</h2>
@@ -88,6 +122,9 @@
           <li>Email and SMS are not considered very secure</li>
           <li>OTP authenticator apps are clunky and annoying</li>
         </ul>
+        <aside class="notes">
+          <p>00:11 - 00:12</p>
+        </aside>
       </section>
       <section>
         <h2>What is a second factor anyway?</h2>
@@ -97,6 +134,11 @@
           <li>Something you are</li>
           <li>Passkeys always hit two of these</li>
         </ul>
+        <aside class="notes">
+          <p>00:12 - 00:13</p>
+          <p>Something you have is the device</p>
+          <p>Something you know is a PIN code</p>
+          <p>Something you are is your fingerprint or face</p>
       </section>
       <section>
         <h2>However...</h2>
@@ -105,10 +147,19 @@
           <li>Something you forgot</li>
           <li>Something you were</li>
         </ul>
+        <aside class="notes">
+          <p>00:13 - 00:15</p>
+          <p>You can lose your phone, laptop</p>
+          <p>You can forget your PIN</p>
+          <p>Your fingerprints can temporarily get damaged. Your face could change.</p>
+          <p>Also: hardware keys are technically not 2FA, but are a strong single factor.</p>
+        </aside>
       </section>
       <section>
         <h2>How?</h2>
         <code>pip install django-otp-webuathn</code>
+        <aside class="notes">
+          <p>00:15 - 00:15:30</p>
       </section>
       <section>
         <pre>
@@ -129,6 +180,9 @@
             {% endblock userlinks %}
           </code>
         </pre>
+        <aside class="notes">
+          <p>00:15:30 - 00:16:30</p>
+        </aside>
       </section>
       <section>
         <pre>
@@ -137,16 +191,10 @@
             {% load otp_webauthn %}
             {% block content %}
               {{ block.super }}
-              <form method="post" class="submit-row">
+              <form method="post">
                 <span id="passkey-verification-placeholder"></span>
                 <template id="passkey-verification-available-template">
-                  <button
-                    id="passkey-verification-button"
-                    class="button"
-                    style="padding:10px 15px; margin-top: 15px"
-                  >
-                    Login using a Passkey
-                  </button>
+                  <button id="passkey-verification-button">Login with Passkey</button>
                   <div id="passkey-verification-status-message"></div>
                 </template>
                 <template id="passkey-verification-unavailable-template">
@@ -157,9 +205,16 @@
             {% endblock content %}
           </code>
         </pre>
+        <aside class="notes">
+          <p>00:16:30 - 00:17</p>
+        </aside>
       </section>
       <section>
         <h2>Demo</h2>
+        <aside class="notes">
+          <p>00:17 - 00:20</p>
+          <p>Yes, it's a three minute demo (hopefully).</p>
+        </aside>
       </section>
       <section>
         <h2>Integration</h2>
@@ -167,6 +222,11 @@
           <li>Listing passkeys nicely (MDS)</li>
           <li>Deleting passkeys</li>
         </ul>
+        <aside class="notes">
+          <p>00:20 - 00:21</p>
+          <p>MDS is FIDO Alliance MetaData Service, stores AAGUIDs for providers (Apple, etc.)</p>
+          <p>Deleting the passkey you're logged in with. What if you can only login with passkeys?</p>
+        </aside>
       </section>
       <section>
         <h2>Using passkeys with 2FA</h2>
@@ -188,25 +248,48 @@
                 return _wrapped_view
           </code>
         </pre>
+        <aside class="notes">
+          <p>00:21 - 00:22</p>
+        </aside>
       </section>
       <section>
         <h2>Passkeys in Django core?</h2>
         Maybe.
+        <aside class="notes">
+          <p>00:22 - 00:24</p>
+        </aside>
       </section>
       <section>
         <h2>Conclusion</h2>
         <ul>
           <li>I think you should use passkeys</li>
           <li>I think you should offer them to your users</li>
+          <li>I would like to see them in Django some day</li>
         </ul>
+        <aside class="notes">
+          <p>00:24 - 00:25</p>
+        </aside>
       </section>
       <section>
-        <h2>Me</h2>
-        <ul>
-          <li>No social media :)</li>
-          <li>GitHub: <a href="https://github.com/knyghty">@knyghty</a></li>
-          <li>Web: <a href="https://carrick.eu">carrick.eu</a></li>
-        </ul>
+        <div class="flex-images">
+          <div>
+            <h2>Me</h2>
+            <li>No social media :)</li>
+            <li>GitHub: <a href="https://github.com/knyghty">@knyghty</a></li>
+            <li>Web: <a href="https://carrick.eu">carrick.eu</a></li>
+            </ul>
+          </div>
+          <div>
+            <h2>Project and slides</h2>
+            <a href="https://github.com/knyghty/talk-passkeys">
+              <img src="img/repo-qr.svg" width="300" alt="QR code to GitHub repo">
+            </a>
+          </div>
+        </div>
+        <aside class="notes">
+          <p>00:25 - 00:30</p>
+          <p>I guess I answer questions that I'm unqualified to answer now.</p>
+        </aside>
       </section>
     </div>
   </div>
