@@ -20,11 +20,19 @@
       <section>
         <h1>Passkeys in Django</h1>
         The best of all possible worlds
-        <aside class="notes">00:00 - 00:00:30</aside>
+        <aside class="notes">
+          <p>00:00 - 00:00:30</p>
+          <p>Quick show of hands:</p>
+          <ul>
+            <li>Who has a Django application?</li>
+            <li>Of those, who uses passkeys at all?</li>
+            <li>And who uses passkeys as a first-class login method?</li>
+          </ul>
+        </aside>
       </section>
       <section>
         <h2>What this isn't</h2>
-        There are no technical details here.
+        <p>There are no technical details here</p>
         <aside class="notes">00:00:30 - 00:01</aside>
       </section>
       <section>
@@ -38,7 +46,6 @@
           <p>00:01 - 00:02</p>
           <p>
             These are a bit opinionated.
-            Some people have said they're not that usable.
             There are not foolproof and some may not prefer them to passwords.
           </p>
         </aside>
@@ -92,6 +99,8 @@
           <p>00:06 - 00:08</p>
           <p>Limited support for exporting passkeys.</p>
           <p>Worth mentioning here that you can require users with a passkey use it.</p>
+          <p>and users on old browsers are still okay</p>
+          <p>Not 100% true that there's no UX / security tradeoffs!</p>
         </aside>
       </section>
       <section>
@@ -111,9 +120,15 @@
         <ul>
           <li>HTTPS only</li>
           <li>JS required</li>
+          <li>Dealing with multiple providers can be confusing</li>
         </ul>
         <aside class="notes">
           <p>00:10 - 00:11</p>
+          <p>
+            My advice: pick one and stick with it.
+            e.g. you don't need to be using the same vendor to login
+            (login on Windows using your iphone, etc.)
+          </p>
         </aside>
       </section>
       <section>
@@ -132,7 +147,7 @@
           <li>Something you have</li>
           <li>Something you know</li>
           <li>Something you are</li>
-          <li>Passkeys always hit two of these</li>
+          <li>Passkeys (almost) always hit two of these</li>
         </ul>
         <aside class="notes">
           <p>00:12 - 00:13</p>
@@ -164,9 +179,11 @@
       <section>
         <h2>How?</h2>
         <code>uv pip install django-otp-webuathn</code>
-        <p>&hellip; and add some stuff to settings</p>
+        <p>&hellip;and add some stuff to settings</p>
         <aside class="notes">
           <p>00:15 - 00:15:30</p>
+          <p>We're early adopters after all</p>
+        </aside>
       </section>
       <section>
         <pre>
@@ -261,11 +278,15 @@
       </section>
       <section>
         <h2>Passkeys in Django core?</h2>
-        Maybe.
         <aside class="notes">
           <p>00:22 - 00:24</p>
           <p>Carlton's user model ideas</p>
-          <p></p>
+          <p>Carlton's battery packs, but are we still "secure by default"?</p>
+          <p>Pre-requisites:</p>
+          <ul>
+            <li>Better JSON based API support</li>
+            <li>Maybe a better JS story?</li>
+          </ul>
         </aside>
       </section>
       <section>
